@@ -3,6 +3,10 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftJXL",
+    platforms: [
+        .macOS(.v12),
+        .iOS(.v14)
+    ],
     products: [
         .library(name: "SwiftJXL", targets: ["SwiftJXL"]),
     ],
