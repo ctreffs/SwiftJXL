@@ -9,6 +9,7 @@ git submodule update --init --recursive
 mkdir -p build
 pushd build
 
+#CMAKE_OSX_ARCHITECTURES='arm64' cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_SYSTEM_NAME=iOS ..
 CMAKE_OSX_ARCHITECTURES='arm64' cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_OSX_DEPLOYMENT_TARGET='12.0' ..
 CMAKE_OSX_ARCHITECTURES='arm64' cmake --build . --target jxl-static -- -j
 CMAKE_OSX_ARCHITECTURES='arm64' cmake --build . --target jxl_threads-static -- -j
