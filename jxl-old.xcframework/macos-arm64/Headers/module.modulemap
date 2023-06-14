@@ -16,5 +16,8 @@ module jxl {
     
     export *
 
-    link "JpegXL"
+    link "jxl"
+    link "hwy" 
+    link "brotlienc" 
+    link "brotlidec"
 }

@@ -17,4 +17,7 @@ module jxl {
     export *
 
     link "jxl"
+    link "hwy" 
+    link "brotlienc" 
+    link "brotlidec"
 }

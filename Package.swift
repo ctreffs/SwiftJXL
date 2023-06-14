@@ -17,6 +17,10 @@ let package = Package(
                 .target(name: "jxl")
             ]),
         .binaryTarget(name: "jxl", path: "jxl.xcframework"),
+        .executableTarget(
+            name: "JXLCoder",
+            dependencies: ["SwiftJXL"]
+        )
 
     ]
 
