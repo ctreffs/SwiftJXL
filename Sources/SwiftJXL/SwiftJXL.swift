@@ -50,7 +50,7 @@ public extension JXL {
         let enc = JxlEncoderCreate(nil)
         defer { JxlEncoderDestroy(enc) }
         let runner = JxlThreadParallelRunnerCreate(nil, JxlThreadParallelRunnerDefaultNumWorkerThreads())
-
+        defer { JxlThreadParallelRunnerDestroy(runner) }
         guard JxlEncoderSetParallelRunner(enc, JxlThreadParallelRunner, runner) == JXL_ENC_SUCCESS else {
             throw Error.failedToSetParallelRunner
         }
