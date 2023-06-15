@@ -16,14 +16,37 @@ public enum JXL {
 // MARK: - Encoding
 
 public extension JXL {
+    struct EncoderConfig {
+        /// Effort setting.
+        /// Range: 1 .. 9.
+        /// Default: 7.
+        /// Higher number is more effort (slower).
+        public var effort: Int
+
+        /// Sets the distance level for lossy compression:
+        /// target max butteraugli distance, lower = higher quality. Range: 0 .. 15.
+        /// 0.0 = mathematically lossless (however, use JxlEncoderSetFrameLossless instead to use true lossless, as setting distance to 0 alone is not the only requirement).
+        /// 1.0 = visually lossless.
+        /// Recommended range: 0.5 .. 3.0.
+        /// Default value: 1.0.
+        public var distance: Float
+
+        public init(
+            effort: Int = 7,
+            distance: Float = 1.0
+        ) {
+            self.effort = effort
+            self.distance = distance
+        }
+    }
+
     /// - Parameters:
     ///   - data: jpeg data
-    ///   - effort: Encoder effort setting. Range: 1 .. 9. Default: 7. Higher number is more effort (slower).
-    ///   - distance: Sets the distance level for lossy compression: target max butteraugli distance, lower = higher quality. Range: 0 .. 15. 0.0 = mathematically lossless (however, use JxlEncoderSetFrameLossless instead to use true lossless, as setting distance to 0 alone is not the only requirement). 1.0 = visually lossless. Recommended range: 0.5 .. 3.0. Default value: 1.0.
+
     /// - Returns: jpeg xl data
     ///
     /// <https://github.com/libjxl/libjxl/blob/141c48f552851b5efb17ec4053adb8202a250372/examples/encode_oneshot.cc#L149>
-    static func encode(jpeg data: Data, effort: Int = 7, distance: Float = 1.0) throws -> Data {
+    static func encode(jpeg data: Data, config: EncoderConfig = .init()) throws -> Data {
         let enc = JxlEncoderCreate(nil)
         defer { JxlEncoderDestroy(enc) }
         let runner = JxlThreadParallelRunnerCreate(nil, JxlThreadParallelRunnerDefaultNumWorkerThreads())
@@ -36,11 +59,11 @@ public extension JXL {
             throw Error.failedToCreateFrameSettings
         }
 
-        guard JxlEncoderFrameSettingsSetOption(frame_settings, JXL_ENC_FRAME_SETTING_EFFORT, Int64(effort)) == JXL_ENC_SUCCESS else {
+        guard JxlEncoderFrameSettingsSetOption(frame_settings, JXL_ENC_FRAME_SETTING_EFFORT, Int64(config.effort)) == JXL_ENC_SUCCESS else {
             throw Error.failedToSetFrameEffort
         }
 
-        guard JxlEncoderSetFrameDistance(frame_settings, distance) == JXL_ENC_SUCCESS else {
+        guard JxlEncoderSetFrameDistance(frame_settings, config.distance) == JXL_ENC_SUCCESS else {
             throw Error.failedToSetFrameDistance
         }
 
