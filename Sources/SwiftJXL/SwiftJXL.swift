@@ -10,6 +10,7 @@ public enum JXL {
         case failedToProcessEncoderOutput
         case failedToSetFrameDistance
         case failedToSetFrameEffort
+        case failedToSetFrameLossless
     }
 }
 
@@ -31,12 +32,16 @@ public extension JXL {
         /// Default value: 1.0.
         public var distance: Float
 
+        public var lossless: Bool
+
         public init(
             effort: Int = 7,
-            distance: Float = 1.0
+            distance: Float = 1.0,
+            lossless: Bool = true
         ) {
             self.effort = effort
             self.distance = distance
+            self.lossless = lossless
         }
     }
 
@@ -45,7 +50,9 @@ public extension JXL {
 
     /// - Returns: jpeg xl data
     ///
+    /// <https://libjxl.readthedocs.io/en/latest/api_encoder.html>
     /// <https://github.com/libjxl/libjxl/blob/141c48f552851b5efb17ec4053adb8202a250372/examples/encode_oneshot.cc#L149>
+    ///  <https://github.com/libjxl/libjxl/blob/141c48f552851b5efb17ec4053adb8202a250372/lib/extras/enc/jxl.cc#L38>
     static func encode(jpeg data: Data, config: EncoderConfig = .init()) throws -> Data {
         let enc = JxlEncoderCreate(nil)
         defer { JxlEncoderDestroy(enc) }
@@ -65,6 +72,10 @@ public extension JXL {
 
         guard JxlEncoderSetFrameDistance(frame_settings, config.distance) == JXL_ENC_SUCCESS else {
             throw Error.failedToSetFrameDistance
+        }
+
+        guard JxlEncoderSetFrameLossless(frame_settings, config.lossless ? 1 : 0) == JXL_ENC_SUCCESS else {
+            throw Error.failedToSetFrameLossless
         }
 
         let size = data.count * MemoryLayout<UInt8>.size
