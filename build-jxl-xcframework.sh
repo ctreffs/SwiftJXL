@@ -1,18 +1,19 @@
 #!/bin/bash
 
-git clone https://github.com/libjxl/libjxl.git --recursive
+#git clone https://github.com/libjxl/libjxl.git --recursive
 pushd libjxl
 
-git checkout v0.8.1 --force
-git submodule update --init --recursive
+#git checkout v0.8.1 --force
+#git submodule update --init --recursive
 
 mkdir -p build
 pushd build
 
+rm CMakeCache.txt
 #CMAKE_OSX_ARCHITECTURES='arm64' cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_SYSTEM_NAME=iOS ..
-CMAKE_OSX_ARCHITECTURES='arm64' cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_OSX_DEPLOYMENT_TARGET='12.0' ..
-CMAKE_OSX_ARCHITECTURES='arm64' cmake --build . --target jxl-static -- -j
-CMAKE_OSX_ARCHITECTURES='arm64' cmake --build . --target jxl_threads-static -- -j
+CMAKE_OSX_ARCHITECTURES='arm64;x86_64' cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF -DCMAKE_OSX_DEPLOYMENT_TARGET='12.0' ..
+CMAKE_OSX_ARCHITECTURES='arm64;x86_64' cmake --build . --target jxl-static -- -j
+CMAKE_OSX_ARCHITECTURES='arm64;x86_64' cmake --build . --target jxl_threads-static -- -j
 
 popd
 popd
