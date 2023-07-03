@@ -101,14 +101,6 @@ public extension JXL {
             throw Error.failedToSetFrameLossless
         }
 
-        /*
-         JXL_ENC_FRAME_SETTING_MODULAR
-
-         JXL_ENC_FRAME_SETTING_KEEP_INVISIBLE
-
-         JxlEncoderFrameSettingsSetFloatOption(<#T##frame_settings: OpaquePointer!##OpaquePointer!#>, <#T##option: JxlEncoderFrameSettingId##JxlEncoderFrameSettingId#>, <#T##value: Float##Float#>)
-          */
-
         let size = data.count * MemoryLayout<UInt8>.size
         return try data.withUnsafeBytes { ptr in
             guard JxlEncoderAddJPEGFrame(
